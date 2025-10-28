@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -10,5 +10,5 @@ import { RouterOutlet, RouterModule } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Weather App';
+  title = 'hipolito_midterm_exam';
 }

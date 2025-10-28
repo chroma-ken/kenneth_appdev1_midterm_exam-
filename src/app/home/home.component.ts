@@ -1,57 +1,42 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { WeatherService } from '../services/weather.service';
-import { CityService } from '../services/city.service';
+import { WeatherService } from '../services/weather.service'; // ✅ fixed import
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './home.component.html',
+  templateUrl: './home.component.html', // ✅ fixed file path
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  city = '';
+  city: string = '';
   weatherData: any = null;
-  filteredCities: string[] = [];
-  allCities: string[] = [];
+  errorMessage: string = '';
 
-  constructor(private weatherService: WeatherService, private cityService: CityService) {
-    this.loadCities();
-  }
+  constructor(private weather: WeatherService) {}
 
   getWeather() {
-    if (!this.city.trim()) return;
     this.weatherData = null;
+    this.errorMessage = '';
 
-    this.weatherService.getWeather(this.city).subscribe({
-      next: (data) => (this.weatherData = data),
-      error: (err) => console.error('Error fetching weather:', err)
-    });
-  }
-
-  saveCity() {
-    if (this.city.trim()) {
-      this.cityService.addCity(this.city.trim());
-      alert(`${this.city} saved!`);
-      this.loadCities();
-      this.city = '';
+    if (!this.city.trim()) {
+      this.errorMessage = '⚠️ Please enter a city name.';
+      return;
     }
-  }
 
-  loadCities() {
-    this.allCities = this.cityService.getCities();
-    this.filteredCities = [...this.allCities];
-  }
-
-  filterCities() {
-    const term = this.city.toLowerCase();
-    this.filteredCities = this.allCities.filter(c => c.toLowerCase().includes(term));
-  }
-
-  selectCity(city: string) {
-    this.city = city;
-    this.getWeather();
+    this.weather.getWeather(this.city).subscribe({
+      next: (data: any) => {
+        if (data && data.current) {
+          this.weatherData = data;
+        } else {
+          this.errorMessage = 'City not found or API error.';
+        }
+      },
+      error: () => {
+        this.errorMessage = 'Unable to connect to the weather service.';
+      }
+    });
   }
 }

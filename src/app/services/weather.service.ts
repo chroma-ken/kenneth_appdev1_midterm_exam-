@@ -6,12 +6,13 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class WeatherService {
-  private apiKey = 'YOUR_API_KEY';
-  private apiUrl = 'http://api.weatherstack.com/current';
+  private apiKey = '833744a8e7cef88112ebea8e88821c13';
+  private apiURL = 'http://api.weatherstack.com/current';
 
   constructor(private http: HttpClient) {}
 
   getWeather(city: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}?access_key=${this.apiKey}&query=${city}`);
+    const url = `${this.apiURL}?access_key=${this.apiKey}&query=${city}`;
+    return this.http.get(url);
   }
 }
