@@ -1,0 +1,34 @@
+<div class="container mt-5 text-center">
+  <h2 class="mb-4">🌦️ Search Weather by City</h2>
+
+  <!-- Search box -->
+  <div class="input-group mb-3 w-75 mx-auto">
+    <input [(ngModel)]="city" placeholder="Enter city name" class="form-control" (input)="filterCities()" />
+    <button class="btn btn-primary" (click)="getWeather()">Search</button>
+  </div>
+
+  <!-- Filtered saved cities -->
+  <div *ngIf="filteredCities.length > 0" class="mb-3">
+    <p class="text-muted">Saved cities matching "{{ city }}":</p>
+    <ul class="list-group w-50 mx-auto">
+      <li
+        class="list-group-item list-group-item-action"
+        *ngFor="let c of filteredCities"
+        (click)="selectCity(c)"
+        style="cursor: pointer;"
+      >
+        {{ c }}
+      </li>
+    </ul>
+  </div>
+
+  <!-- Weather info -->
+  <div *ngIf="weatherData" class="card p-4 shadow-sm mx-auto mt-4" style="max-width: 500px;">
+    <h4>{{ weatherData.location.name }}, {{ weatherData.location.country }}</h4>
+    <p>Temperature: {{ weatherData.current.temperature }} °C</p>
+    <p>Condition: {{ weatherData.current.weather_descriptions[0] }}</p>
+    <img [src]="weatherData.current.weather_icons[0]" alt="Weather icon" class="img-fluid mx-auto" />
+
+    <button class="btn btn-success mt-3" (click)="saveCity()">Save City</button>
+  </div>
+</div>
